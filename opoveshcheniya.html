@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Оповещения</title>
+    <link rel="stylesheet" href="../CNC/css/style.css">
+    <script src="https://kit.fontawesome.com/7a44677aa9.js" crossorigin="anonymous"></script>
+    <style>
+        body {
+            display: flex;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            background: #f4f4f4;
+        }
+
+        .sidebar {
+            width: 250px;
+            background: rgba(0, 0, 0, 0.05);
+            color: #333;
+            padding: 20px;
+            height: 100vh;
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
+        }
+
+        .sidebar ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .sidebar ul li {
+            padding: 12px;
+            border-radius: 5px;
+            transition: background 0.3s;
+        }
+
+        .sidebar ul li:hover {
+            background: #fff;
+        }
+
+        .main-content {
+            flex: 1;
+            padding: 20px;
+        }
+
+        .alert {
+            display: flex;
+            align-items: center;
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 10px;
+        }
+
+        .alert .icon {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            margin-right: 15px;
+            transition: background 0.5s;
+        }
+
+        .alert-details {
+            display: flex;
+            flex-direction: column;
+        }
+    </style>
+</head>
+<body>
+    <div class="top-nav">
+        <img src="./img/logo.jpg" alt="Логотип" class="logo">
+        <h1 class="title">Мониторинг промышленных станков</h1>
+    </div>
+    <!-- <button class="menu-toggle" onclick="toggleMenu()">☰</button> -->
+    <div class="sidebar">
+        <ul>
+            <li><a href="monitor.html"><i class="fa-solid fa-house"></i> Главная панель</a></li>
+            <li><a href="opoveshcheniya.html"><i class="fas fa-exclamation-triangle"></i> Оповещения</a></li>
+            <li><a href="otchety.html"><i class="fas fa-chart-bar"> </i> Отчёты и аналитика</a></li>
+            <li><a href="setup.html"><i class="fas fa-cog"></i> Настройки</a></li>
+            <li><a href="login.html"><i class="fas fa-lock"></i> Выйти</a></li>
+        </ul>
+    </div>
+    <script>
+        function toggleMenu() {
+            document.querySelector('.sidebar').classList.toggle('closed');
+        }
+    </script>
+    <div class="main-content">
+        <h1>Оповещения</h1>
+        <div id="alerts"></div>
+    </div>
+
+    <script>
+        const alerts = [
+            { machine: "Doosan MX2600", colorIndex: 0 },
+            { machine: "Doosan VC630", colorIndex: 1 },
+            { machine: "CACTA", colorIndex: 2 }
+        ];
+
+        const colors = ["red", "yellow", "green"];
+        const messages = {
+            "red": "Опасная ситуация: слишком высокая температура!",
+            "yellow": "Примечание: Вибрация усилилась, необходимо проверить.",
+            "green": "Стабильно: все в норме."
+        };
+
+        function updateAlerts() {
+            const alertContainer = document.getElementById("alerts");
+            alertContainer.innerHTML = "";
+            
+            alerts.forEach(alertData => {
+                const alertElement = document.createElement("div");
+                alertElement.classList.add("alert");
+                
+                const iconElement = document.createElement("div");
+                iconElement.classList.add("icon");
+                const currentColor = colors[alertData.colorIndex];
+                iconElement.style.background = currentColor;
+                
+                const detailsElement = document.createElement("div");
+                detailsElement.classList.add("alert-details");
+                detailsElement.innerHTML = `
+                    <strong>${alertData.machine}</strong>
+                    <span>${messages[currentColor]}</span>
+                `;
+                
+                alertElement.appendChild(iconElement);
+                alertElement.appendChild(detailsElement);
+                alertContainer.appendChild(alertElement);
+            });
+        }
+
+        function cycleColors() {
+            alerts.forEach(alertData => {
+                alertData.colorIndex = (alertData.colorIndex + 1) % colors.length;
+            });
+            updateAlerts();
+        }
+
+        updateAlerts();
+        setInterval(cycleColors, 5000);
+    </script>
+</body>
+</html>

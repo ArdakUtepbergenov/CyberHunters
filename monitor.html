@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Мониторинг станков</title>
+    <link rel="stylesheet" href="../CNC/css/monitor-css.css">
+    <script src="https://kit.fontawesome.com/7a44677aa9.js" crossorigin="anonymous"></script>
+</head>
+
+<body>
+    <div class="top-nav">
+        <img src="./img/logo.jpg" alt="Логотип" class="logo">
+        <h1 class="title">Мониторинг промышленных станков</h1>
+    </div>
+    <div class="sidebar">
+        <ul>
+            <li><a href="monitor.html"><i class="fa-solid fa-house"></i> Главная панель</a></li>
+            <li><a href="opoveshcheniya.html"><i class="fas fa-exclamation-triangle"></i> Оповещения</a></li>
+            <li><a href="otchety.html"><i class="fas fa-chart-bar"> </i> Отчёты и аналитика</a></li>
+            <li><a href="setup.html"><i class="fas fa-cog"></i> Настройки</a></li>
+            <li><a href="login.html"><i class="fas fa-lock"></i> Выйти</a></li>
+        </ul>
+    </div>
+    <div class="main-content">
+        <h1>Главная панель</h1>
+        <div class="cards">
+            <div class="card active">
+                <a href="doocan.html">
+                    <img src="img/Picture1.png" alt="Doosan MX2600">
+                    <span class="status">Active</span>
+                    <h3>Doosan MX2600</h3>
+                    <p>Давление: Нормальное, расход воздуха: Стабильный</p>
+                </a>
+            </div>
+            <div class="card active">
+                <a href="doocanVC.html">
+                    <img src="img/Picture2.png" alt="Doosan VC630">
+                    <span class="status">Active</span>
+                    <h3>Doosan VC630</h3>
+                    <p>Давление: Нормальное, расход воздуха: Стабильный</p>
+                </a>
+            </div>
+            <div class="card inactive">
+                <a href="sasta.html">
+                    <img src="img/Picture3.png" alt="CACTA CA983C20ФЗ">
+                    <span class="status">Inactive</span>
+                    <h3>CACTA CA983C20ФЗ</h3>
+                    <p>Давление: Высокое, расход воздуха: Нестабильный</p>
+                </a>
+            </div>
+            <div class="card inactive">
+                <a href="ibarmia.html">
+                    <img src="img/picture4.jpeg" alt="Ibarmia ZVH45">
+                    <span class="status">Inactive</span>
+                    <h3>Ibarmia ZVH45</h3>
+                    <p>Температура: Высокая, расход воздуха: Нестабильный</p>
+                </a>
+            </div>
+            <div class="card active">
+                <a href="militronics.html">
+                    <img src="img/Picture5.png" alt="Milltronics ML26">
+                    <span class="status">Active</span>
+                    <h3>Milltronics ML26</h3>
+                    <p>Давление: Нормальное, расход воздуха: Стабильный</p>
+                </a>
+            </div>
+        </div>
+    </div>
+    <script>
+        function toggleMenu() {
+            document.querySelector('.sidebar').classList.toggle('closed');
+        }
+    </script>
+</body>
+
+</html>

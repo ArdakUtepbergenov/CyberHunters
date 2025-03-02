@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="kk">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Мониторинг станка</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="../CNC/css/style.css">
+    <script src="https://kit.fontawesome.com/7a44677aa9.js" crossorigin="anonymous"></script>
+    <style>
+        body {
+            display: flex;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            background: #f4f4f4;
+            color: #333;
+        }
+
+        .sidebar {
+            width: 250px;
+            background: rgba(0, 0, 0, 0.05);
+            color: #333;
+            padding: 20px;
+            height: 100vh;
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
+        }
+
+        .sidebar h2 {
+            font-size: 18px;
+            margin-bottom: 20px;
+        }
+
+        .sidebar ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .sidebar ul li {
+            padding: 12px;
+            border-radius: 5px;
+            transition: background 0.3s;
+        }
+
+        .sidebar ul li:hover {
+            background: #fff;
+        }
+
+        .main-content {
+            flex: 1;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .container {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            max-width: 600px;
+            margin: auto;
+        }
+
+        .card {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .temperature,
+        .pressure {
+            font-size: 30px;
+            font-weight: bold;
+        }
+
+        .pressure.low {
+            color: red;
+        }
+
+        .vibration {
+            font-size: 20px;
+            padding: 10px;
+            border-radius: 5px;
+            display: inline-block;
+        }
+
+        .low {
+            background-color: #22c55e;
+            color: white;
+        }
+
+        .medium {
+            background-color: #eab308;
+            color: white;
+        }
+
+        .high {
+            background-color: #dc2626;
+            color: white;
+        }
+
+        canvas {
+            max-width: 100%;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="top-nav">
+        <img src="./img/logo.jpg" alt="Логотип" class="logo">
+        <h1 class="title">Мониторинг промышленных станков</h1>
+    </div>
+    <!-- <button class="menu-toggle" onclick="toggleMenu()">☰</button> -->
+    <div class="sidebar">
+        
+        <ul>
+            <li><a href="monitor.html"><i class="fa-solid fa-house"></i> Главная панель</a></li>
+            <li><a href="opoveshcheniya.html"><i class="fas fa-exclamation-triangle"></i> Оповещения</a></li>
+            <li><a href="otchety.html"><i class="fas fa-chart-bar"> </i> Отчёты и аналитика</a></li>
+            <li><a href="setup.html"><i class="fas fa-cog"></i> Настройки</a></li>
+            <li><a href="login.html"><i class="fas fa-lock"></i> Выйти</a></li>
+        </ul>
+    </div>
+    <script>
+        function toggleMenu() {
+            document.querySelector('.sidebar').classList.toggle('closed');
+        }
+    </script>
+    <div class="main-content">
+        <h1>Doosan VC630</h1>
+        <div class="container">
+            <div class="card">
+                <h3>Температура</h3>
+                <p class="temperature" id="temperature">75°C</p>
+            </div>
+            <div class="card">
+                <h3>Вибрация</h3>
+                <p class="vibration low" id="vibration">Низкая</p>
+            </div>
+            <div class="card">
+                <h3>Уровень масла</h3>
+                <canvas id="oilChart"></canvas>
+            </div>
+            <div class="card">
+                <h3>Электропотребление</h3>
+                <canvas id="powerChart"></canvas>
+            </div>
+            <div class="card">
+                <h3>Давление</h3>
+                <p class="pressure" id="pressure">100 бар</p>
+            </div>
+        </div>
+    </div>
+    <script>
+        function getRandomInt(min, max) {
+            return Math.floor(Math.random() * (max - min + 1)) + min;
+        }
+
+        function updateData() {
+            let temp = getRandomInt(40, 100);
+            document.getElementById("temperature").textContent = temp + "°C";
+
+            let vibrationLevels = ["Низкая", "Средняя", "Высокая"];
+            let vibrationColors = ["low", "medium", "high"];
+            let vibIndex = getRandomInt(0, 2);
+            let vibElement = document.getElementById("vibration");
+            vibElement.textContent = vibrationLevels[vibIndex];
+            vibElement.className = "vibration " + vibrationColors[vibIndex];
+
+            let pressure = getRandomInt(30, 120);
+            let pressureElement = document.getElementById("pressure");
+            pressureElement.textContent = pressure + " бар";
+            pressureElement.className = "pressure" + (pressure < 50 ? " low" : "");
+
+            oilChart.data.datasets[0].data.push(getRandomInt(30, 100));
+            if (oilChart.data.datasets[0].data.length > 10) oilChart.data.datasets[0].data.shift();
+            oilChart.update();
+
+            powerChart.data.datasets[0].data.push(getRandomInt(200, 500));
+            if (powerChart.data.datasets[0].data.length > 10) powerChart.data.datasets[0].data.shift();
+            powerChart.update();
+        }
+
+        let oilChart = new Chart(document.getElementById("oilChart"), {
+            type: "line",
+            data: {
+                labels: Array.from({ length: 10 }, (_, i) => i + 1),
+                datasets: [{ label: "Уровень масла", borderColor: "#22c55e", data: Array.from({ length: 10 }, () => getRandomInt(30, 100)) }]
+            }
+        });
+
+        let powerChart = new Chart(document.getElementById("powerChart"), {
+            type: "bar",
+            data: {
+                labels: Array.from({ length: 10 }, (_, i) => i + 1),
+                datasets: [{ label: "Электропотребление", backgroundColor: "#3b82f6", data: Array.from({ length: 10 }, () => getRandomInt(200, 500)) }]
+            }
+        });
+
+        setInterval(updateData, 3000);
+    </script>
+</body>
+
+</html>

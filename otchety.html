@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Отчёты и аналитика</title>
+    <link rel="stylesheet" href="../CNC/css/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script src="https://kit.fontawesome.com/7a44677aa9.js" crossorigin="anonymous"></script>
+    <style>
+        body {
+            display: flex;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            background: #f4f4f4;
+        }
+
+        .sidebar {
+            width: 250px;
+            background: rgba(0, 0, 0, 0.05);
+            color: #333;
+            padding: 20px;
+            height: 100vh;
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
+            position: fixed;
+            left: 0;
+            top: 0;
+        }
+
+        .main-content {
+            flex: 1;
+            padding: 20px;
+            text-align: center;
+            margin-left: 250px;
+        }
+
+        .charts {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .chart-container {
+            width: 400px;
+            height: 400px;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .export-btn {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
+            background: green;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .export-btn:hover {
+            background: darkgreen;
+        }
+    </style>
+</head>
+<body>
+    <div class="top-nav">
+        <img src="./img/logo.jpg" alt="Логотип" class="logo">
+        <h1 class="title">Мониторинг промышленных станков</h1>
+    </div>
+    <div class="sidebar">
+        <ul>
+            <li><a href="monitor.html"><i class="fa-solid fa-house"></i> Главная панель</a></li>
+            <li><a href="opoveshcheniya.html"><i class="fas fa-exclamation-triangle"></i> Оповещения</a></li>
+            <li><a href="otchety.html"><i class="fas fa-chart-bar"> </i> Отчёты и аналитика</a></li>
+            <li><a href="setup.html"><i class="fas fa-cog"></i> Настройки</a></li>
+            <li><a href="login.html"><i class="fas fa-lock"></i> Выйти</a></li>
+        </ul>
+    </div>
+    
+    <div class="main-content">
+        <h1>Отчёты и аналитика</h1>
+        <div class="charts">
+            <div class="chart-container">
+                <h3>Температурный тренд</h3>
+                <canvas id="temperatureChart"></canvas>
+            </div>
+            <div class="chart-container">
+                <h3>Вибрационный анализ</h3>
+                <canvas id="vibrationChart"></canvas>
+            </div>
+        </div>
+        <button class="export-btn" onclick="exportToExcel()">Сохранить отчет в Excel</button>
+    </div>
+
+    <script>
+        const tempCtx = document.getElementById('temperatureChart').getContext('2d');
+        const vibrationCtx = document.getElementById('vibrationChart').getContext('2d');
+
+        let tempData = [22, 19, 25, 23, 26, 24];
+        let vibrationData = [5, 3, 8, 6, 9, 7];
+
+        let tempChart = new Chart(tempCtx, {
+            type: 'bar',
+            data: {
+                labels: ['Янв', 'Фев', 'Март', 'Апр', 'Май', 'Июнь'],
+                datasets: [{
+                    label: 'Температура (°C)',
+                    data: tempData,
+                    backgroundColor: 'rgba(54, 162, 235, 0.6)',
+                }]
+            },
+            options: {
+                animation: {
+                    duration: 1500,
+                    easing: 'easeOutBounce'
+                }
+            }
+        });
+
+        let vibrationChart = new Chart(vibrationCtx, {
+            type: 'line',
+            data: {
+                labels: ['10:00', '11:00', '12:00', '13:00', '14:00', '15:00'],
+                datasets: [{
+                    label: 'Вибрация (мм/с)',
+                    data: vibrationData,
+                    borderColor: 'rgba(255, 99, 132, 1)',
+                    fill: true,
+                    backgroundColor: 'rgba(255, 99, 132, 0.2)'
+                }]
+            },
+            options: {
+                animation: {
+                    duration: 1500,
+                    easing: 'easeOutBounce'
+                }
+            }
+        });
+
+        function updateCharts() {
+            setInterval(() => {
+                tempData = tempData.map(() => Math.floor(Math.random() * 10) + 20);
+                vibrationData = vibrationData.map(() => Math.floor(Math.random() * 10));
+                tempChart.data.datasets[0].data = tempData;
+                vibrationChart.data.datasets[0].data = vibrationData;
+                tempChart.update();
+                vibrationChart.update();
+            }, 2000);
+        }
+
+        window.onload = function() {
+            updateCharts();
+        };
+
+        function exportToExcel() {
+            let wb = XLSX.utils.book_new();
+
+            let tempSheetData = [
+                ['Месяц', 'Температура (°C)'],
+                ['Янв', tempData[0]],
+                ['Фев', tempData[1]],
+                ['Март', tempData[2]],
+                ['Апр', tempData[3]],
+                ['Май', tempData[4]],
+                ['Июнь', tempData[5]],
+            ];
+
+            let vibrationSheetData = [
+                ['Время', 'Вибрация (мм/с)'],
+                ['10:00', vibrationData[0]],
+                ['11:00', vibrationData[1]],
+                ['12:00', vibrationData[2]],
+                ['13:00', vibrationData[3]],
+                ['14:00', vibrationData[4]],
+                ['15:00', vibrationData[5]],
+            ];
+
+            let tempSheet = XLSX.utils.aoa_to_sheet(tempSheetData);
+            let vibrationSheet = XLSX.utils.aoa_to_sheet(vibrationSheetData);
+
+            XLSX.utils.book_append_sheet(wb, tempSheet, 'Температура');
+            XLSX.utils.book_append_sheet(wb, vibrationSheet, 'Вибрация');
+
+            XLSX.writeFile(wb, 'Отчет.xlsx');
+        }
+    </script>
+</body>
+</html>

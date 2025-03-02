@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Настройки</title>
+    <link rel="stylesheet" href="../CNC/css/style.css">
+    <script src="https://kit.fontawesome.com/7a44677aa9.js" crossorigin="anonymous"></script>
+    <style>
+        body {
+            display: flex;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            background: #f4f4f4;
+        }
+
+        .sidebar {
+            width: 250px;
+            background: rgba(0, 0, 0, 0.05);
+            color: #333;
+            padding: 20px;
+            height: 100vh;
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
+            position: fixed;
+            left: 0;
+            top: 0;
+        }
+
+        .main-content {
+            flex: 1;
+            padding: 50px;
+            text-align: center;
+            margin-left: 250px;
+            background: white;
+            border-radius: 10px;
+            max-width: 800px;
+            margin: 50px auto;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .submit-btn {
+            background: black;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .submit-btn:hover {
+            background: #333;
+        }
+    </style>
+</head>
+<body>
+    <div class="top-nav">
+        <img src="./img/logo.jpg" alt="Логотип" class="logo">
+        <h1 class="title">Мониторинг промышленных станков</h1>
+    </div>
+    <!-- <button class="menu-toggle" onclick="toggleMenu()">☰</button> -->
+    <div class="sidebar">
+        <ul>
+            <li><a href="monitor.html"><i class="fa-solid fa-house"></i> Главная панель</a></li>
+            <li><a href="opoveshcheniya.html"><i class="fas fa-exclamation-triangle"></i> Оповещения</a></li>
+            <li><a href="otchety.html"><i class="fas fa-chart-bar"> </i> Отчёты и аналитика</a></li>
+            <li><a href="setup.html"><i class="fas fa-cog"></i> Настройки</a></li>
+            <li><a href="login.html"><i class="fas fa-lock"></i> Выйти</a></li>
+        </ul>
+    </div>
+    <script>
+        function toggleMenu() {
+            document.querySelector('.sidebar').classList.toggle('closed');
+        }
+    </script>
+    <div class="main-content">
+        <h1>Настройки</h1>
+        <div class="form-group">
+            <label for="update-frequency">Параметр данных</label>
+            <input type="text" id="update-frequency" placeholder="Введите параметр, например давление">
+        </div>
+        <div class="form-group">
+            <label for="alert-threshold">Порог для оповещений</label>
+            <input type="text" id="alert-threshold" placeholder="Укажите уровень для оповещений">
+        </div>
+        <button class="submit-btn">Сохранить изменения</button>
+        <button class="submit-btn" onclick="fakeLogin()">Войти</button>
+<script>
+    function fakeLogin() {
+        window.location.href = "index.html"; // Қажетті бетке бағыттауға болады
+    }
+</script>
+    </div>
+</body>
+</html>
